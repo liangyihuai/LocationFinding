@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huai.web.repository.ResultMapper">
+
+    <!--<sql id="Select_Condition">
+        <if test="school != null and school != ''">
+            AND school LIKE '${school}%'
+        </if>
+        <if test="education != null and education != ''">
+            AND education LIKE '${education}%'
+        </if>
+        <if test="nationality != null and nationality != ''">
+            AND nationality like '${nationality}%'
+        </if>
+        <if test="major != null and major != ''">
+            AND major like '${major}%'
+        </if>
+        <if test="residence != null and residence != ''">
+            AND residence like '${residence}%'
+        </if>
+        <if test="gender != null and gender != ''">
+            AND gender = #{gender}
+        </if>
+    </sql>
+
+    <select id="getCount" parameterType="com.huai.assist.pojo.RespondentSearchCondition"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM respondent WHERE 1=1
+        <include refid="Select_Condition"/>
+    </select>
+
+    <select id="search" parameterType="com.huai.assist.pojo.RespondentSearchCondition"
+            resultType="com.huai.assist.pojo.Respondent">
+        SELECT * FROM respondent WHERE 1=1
+        <include refid="Select_Condition"/>
+        <if test="page != null and page.start >= 0 and page.pageSize > 0">
+            limit #{page.start}, #{page.pageSize}
+        </if>
+    </select>-->
+
+    <select id="queryResultSet" resultType="com.huai.web.pojo.Result">
+        SELECT * FROM resultSet WHERE 1=1
+        <if test="start >= 0 and pageSize > 0">
+            limit #{start}, #{pageSize}
+        </if>
+    </select>
+
+</mapper>

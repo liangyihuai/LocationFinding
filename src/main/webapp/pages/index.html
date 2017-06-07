@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>execute-algorithm</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+</head><!--/head-->
+
+<body>
+<div class="container-fluid">
+    <!--<div align="center"><h3>执行算法</h3></div>-->
+    <div >
+
+        <div class="tabable" id="tabs-157328">
+            <ul class="nav nav-tabs">
+                <li  class="active">
+                    <a href="#params-tab-id" data-toggle="tab" onclick="">算法参数</a>
+                </li>
+                <li>
+                    <a href="#data-set-id" data-toggle="tab" onclick="getAllUsers()">数据集</a>
+                </li>
+                <li>
+                    <a href="#result-tab-id" data-toggle="tab">结果存储</a>
+                </li>
+                <li>
+                    <a href="#exec-tab-id" data-toggle="tab">执行算法</a>
+                </li>
+                <li>
+                    <a  onclick="forwardDatasetDiplayMap()">可视化数据集</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="params-tab-id">
+                    <form class="form-horizontal" role="form" style="margin-top: 50px">
+                        <div class="form-group">
+                            <label for="eps-id"  class="col-sm-3 control-label">eps:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="0.06" id="eps-id" placeholder="请输入eps">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="minPoints-id"  class="col-sm-3 control-label">Min Points:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="2"
+                                       id="minPoints-id" placeholder="请输入MinPoints">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="box-length-id"  class="col-sm-3 control-label">Box Length:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="0.02" id="box-length-id" placeholder="请输入box length">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pointNum-cluster-id"  class="col-sm-3 control-label">一个簇的最少点个数:</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="4"
+                                       id="pointNum-cluster-id" placeholder="请输入一个簇的最少点个数">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="status-duration-id"  class="col-sm-3 control-label">状态的持续时间(ms):</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="7200000"
+                                       id="status-duration-id" placeholder="请输入状态的持续时间">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subtractTime-id"  class="col-sm-3 control-label">两个相邻状态的时间间隔(ms):</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" value="3600000"
+                                       id="subtractTime-id" placeholder="请输入两个相邻状态的时间间隔">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="tab-pane" id="data-set-id">
+                    <form class="form-horizontal" id="dataset-form" style="margin-top: 10px; ">
+                        <legend >数据集</legend>
+                        <div class="form-group">
+                            <label for="local-dataSet-id" class="col-sm-2 control-label">本地系统文件:</label>
+                            <input type="radio" checked="checked" id="local-dataSet-radio" value="localFS" name="fs" class="col-sm-1 control-label"/>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="local-dataSet-id" name="userIDIndex"
+                                       value="/home/liangyh/Documents/GRADUATE-PROJECT/DataSet/重庆一用户三天数据.txt"
+                                       placeholder="Local URL,格式: /your/file/path">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdfs-dataSet-id" class="col-sm-2 control-label">HDFS文件:</label>
+                            <input type="radio" value="hdfs" name="fs" id="hdfs-dataSet-radio" class="col-sm-1 control-label"/>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="hdfs-dataSet-id"
+                                       name="userIDIndex" placeholder="HDFS URL,格式:hdfs://masterIP:port/your/file/path">
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="form-horizontal" id="uploadMusicForm" style="margin-top: 50px;">
+                        <legend >数据集字段索引和分隔符</legend>
+
+                        <div class="form-group">
+                            <label for="user-id-index" class="col-sm-2 control-label">User ID Index</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" value="0"
+                                       id="user-id-index" name="userIDIndex" placeholder="请输入UserIDIndex">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="time-index" class="col-sm-2 control-label">Time Index</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" value="1"
+                                       id="time-index" name="timeIndex" placeholder="请输入TimeIndex">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude-index" class="col-sm-2 control-label">Longitude Index</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" value="3"
+                                       id="longitude-index" name="longitudeIndex" placeholder="请输入LongitudeIndex">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude-index" class="col-sm-2 control-label">Latitude Index</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" value="2"
+                                       id="latitude-index" name="latitudeIndex" placeholder="请输入LatitudeIndex">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="separator-index" class="col-sm-2 control-label">separator</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" value="\t"
+                                       id="separator-index" name="latitudeIndex" placeholder="请输入separator">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="result-tab-id">
+                    <form class="form-horizontal" id="result-form" style="margin-top: 10px; ">
+                        <legend >结果集存储路径</legend>
+                        <div class="form-group">
+                            <label for="local-result-id" class="col-sm-2 control-label">本地系统路径:</label>
+                            <input type="radio" checked="checked" id="local-resultSet-radio" value="localFS" name="fs-result" class="col-sm-1 control-label"/>
+                            <div class="col-sm-5">
+                                <input id="local-result-id" class="form-control" value="/home/liangyh/tmp/result.txt"
+                                       type="text" placeholder="本地系统路径"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hdfs-result-id" class="col-sm-2 control-label">HDFS路径:</label>
+                            <input type="radio" value="hdfsResult" id="hdfs-resultSet-radio" name="fs-result" class="col-sm-1 control-label"/>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" id="hdfs-result-id" value="hdfs://master:9000/output"
+                                       name="userIDIndex" placeholder="HDFS URL,格式:hdfs://masterIP:port/your/file/path">
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="tab-pane" id="exec-tab-id">
+                    <div style="margin-top: 20px">
+                        <div>
+                            <h3>&nbsp;&nbsp;&nbsp;&nbsp;Spark运行模式:</h3>
+                            <div style="margin-left: 20%">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sparkModel" id="local-id" value="option1" checked> Local
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="sparkModel" id="standalone-id" value="option2">Standalone
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class='span12' id='running-alert-id'></div>
+
+                        <div class="col-md-1" style="margin-left: 20%">
+                            <input type="button" onclick="execute()" class="btn btn-success" value="执行算法">
+                        </div>
+                        <div class="col-md-1">
+                            <input type="button" onclick="getLog()" class="btn btn-success" value="刷新日志">
+                        </div>
+                        <div class="col-md-1">
+                            <input type="button" onclick="emptyLog()" class="btn btn-success" value="清空日志">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" style="margin-top: 10px">
+                        <pre  style="overflow: auto; max-height: 350px" id="log-display-id"></pre>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="dataset-map-tab-id">
+                    <div id="dataset-map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="JavaScript" type="text/javascript" src="../js/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="../js/bootstrap.js"></script>
+
+<script language="javascript" type="text/javascript">
+    function execute() {
+        var eps = $("#eps-id").get(0).value;
+        var minPoints = $("#minPoints-id").get(0).value;
+        var boxLength = $("#box-length-id").get(0).value;
+        var pointNumCluster = $("#pointNum-cluster-id").get(0).value;
+        var statusDuration = $("#status-duration-id").get(0).value;
+        var subtractTime = $("#subtractTime-id").get(0).value;
+
+        var dataset_local = $("#local-dataSet-id").get(0).value;
+        var checkLocalDataSet = 0;
+        if($("#local-dataSet-radio").get(0).checked){
+            checkLocalDataSet = 1;
+        }
+        var dataset_hdfs = $("#hdfs-dataSet-id").get(0).value;
+        var checkHDFSDataSet = 0;
+        if($("#hdfs-dataSet-radio").get(0).checked){
+            checkHDFSDataSet = 1;
+            var index = dataset_hdfs.indexOf("hdfs")
+            if(index != 0){
+                alert("数据集的路径没有以hdfs开头!");
+                return ;
+            }
+        }
+
+        var userIdIndex = $("#user-id-index").get(0).value;
+        var timeIndex = $("#time-index").get(0).value;
+        var longitudeIndex = $("#longitude-index").get(0).value;
+        var latitudeIndex = $("#latitude-index").get(0).value;
+        var separatorIndex = $("#separator-index").get(0).value;
+
+        var local_resultSet = $("#local-result-id").get(0).value;
+        var checkLocalResultSet = 0;
+        if($("#local-resultSet-radio").get(0).checked){
+            checkLocalResultSet = 1;
+        }
+        var hdfs_resultSet = $("#hdfs-result-id").get(0).value;
+        var checkHDFSResultSet = 0;
+        if($("#hdfs-resultSet-radio").get(0).checked){
+            checkHDFSResultSet = 1;
+            var index = hdfs_resultSet.indexOf("hdfs")
+            if(index != 0){
+                alert("结果集的路径没有以hdfs开头!");
+                return ;
+            }
+        }
+
+        var runModel = "0";
+        if($("#standalone-id").get(0).checked){
+            runModel = "1";
+        }
+
+        var data = {
+            "eps":eps,
+            "minPoints":minPoints,
+            "boxLength":boxLength,
+            "pointNumCluster":pointNumCluster,
+            "statusDuration":statusDuration,
+            "subtractTime":subtractTime,
+
+            "dataset_local":dataset_local,
+            "dataset_hdfs":dataset_hdfs,
+            "checkLocalDataSet":checkLocalDataSet,
+            "checkHDFSDataSet":checkHDFSDataSet,
+
+            "userIdIndex":userIdIndex,
+            "timeIndex":timeIndex,
+            "longitudeIndex":longitudeIndex,
+            "latitudeIndex":latitudeIndex,
+            "separatorIndex":separatorIndex,
+
+            "local_resultSet":local_resultSet,
+            "hdfs_resultSet":hdfs_resultSet,
+            "checkLocalResultSet":checkLocalResultSet,
+            "checkHDFSResultSet":checkHDFSResultSet,
+
+            "runModel":runModel
+        };
+
+        $.ajax({
+            url:"/exec/algorithm.do",
+            type:"post",
+            data:data,
+            success:function(data){
+
+                var div = document.getElementById("running-alert-id");
+                div.innerHTML = "<div class='alert alert-success'> " +
+                    "<button type='button' class='close' data-dismiss='alert'>×</button> " +
+                    "<h4 style='margin-left: 30%'>提示:</h4> " +
+                    "<span style='margin-left: 45%'>算法运行中</span> </div>";
+            }
+        });
+    }
+
+    function getLog() {
+        var preTag = document.getElementById('log-display-id');
+        preTag.innerHTML = "";
+        $.ajax({
+            url:"/exec/getLog.do",
+            type:"get",
+            success:function(log){
+                preTag.innerHTML = log;
+                preTag.scrollTop=preTag.scrollHeight;
+            }
+        });
+    }
+
+    function emptyLog() {
+        $.ajax({
+            url:"/exec/emptyLog.do",
+            type:"get",
+            success:function(data){
+                var preTag = document.getElementById('log-display-id');
+                preTag.innerHTML = "";
+            }
+        });
+    }
+
+    function forwardDatasetDiplayMap() {
+        var dataset_local = $("#local-dataSet-id").get(0).value;
+        var checkLocalDataSet = 0;
+        if($("#local-dataSet-radio").get(0).checked){
+            checkLocalDataSet = 1;
+        }
+        var dataset_hdfs = $("#hdfs-dataSet-id").get(0).value;
+        var checkHDFSDataSet = 0;
+        if($("#hdfs-dataSet-radio").get(0).checked){
+            checkHDFSDataSet = 1;
+        }
+
+        var local_resultSet = $("#local-result-id").get(0).value;
+        var checkLocalResultSet = 0;
+        if($("#local-resultSet-radio").get(0).checked){
+            checkLocalResultSet = 1;
+        }
+        var hdfs_resultSet = $("#hdfs-result-id").get(0).value;
+        var checkHDFSResultSet = 0;
+        if($("#hdfs-resultSet-radio").get(0).checked){
+            checkHDFSResultSet = 1;
+        }
+
+        var longitudeIndex = $("#longitude-index").get(0).value;
+        var latitudeIndex = $("#latitude-index").get(0).value;
+        var separator = $("#separator-index").get(0).value;
+
+        var dataset = "";
+        if(checkLocalDataSet == 1){
+            dataset = dataset_local;
+        }else{
+            dataset = dataset_hdfs;
+        }
+
+        var resultset = "";
+        if(checkLocalResultSet == 1){
+            resultset = local_resultSet;
+        }else{
+            resultset = hdfs_resultSet;
+        }
+
+        var url = encodeURI("/pages/datasetMap.html?dataset="+dataset+
+            "&resultset="+resultset+"&longitudeIndex="+longitudeIndex+
+            "&latitudeIndex="+latitudeIndex+"&separator="+separator);
+        window.open(url);
+    }
+
+</script>
+</body>
+</html>
